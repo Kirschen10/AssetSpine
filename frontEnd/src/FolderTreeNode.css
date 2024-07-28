@@ -1,0 +1,39 @@
+/* FolderTreeNode.css */
+.folder-node {
+    cursor: pointer;
+    margin-left: 16px;
+    border-radius: 4px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .folder-node:hover {
+    background-color: #f0f0f0;
+  }
+
+
+  .folder-node.selected {
+    font-weight: bold;
+  }
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 16px;
+  }
+  
+
+.tooltip {
+  font-size: 14px;
+  width: 100px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  transition: opacity 0.3s;
+}
+
