@@ -51,7 +51,7 @@ function Home() {
 
   /* Google Map */
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAFQOvZvXyFknkXTButx5u9jd3UXVgNBs8",
+    googleMapsApiKey: "",
   });
   const [center, setCenter] = useState({ lat: 32.484398675882346, lng: 34.949290038691394 });
 
