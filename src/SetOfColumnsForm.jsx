@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 
+/**
+ * SetOfColumnsForm component:
+ * This component handles the input and management of information related to the set of columns, pier caps,
+ * and bearings associated with a bridge asset. It retrieves the relevant data from the server upon initial load
+ * and populates the form with either previously entered data (if in edit mode) or default values for new entries.
+ * Users can manually input quantities for each column row and navigate through different form steps using the provided buttons.
+ * The component supports both creating new records and editing existing ones, as well as saving and retrieving the information 
+ * from the database when navigating between different components.
+ */
+
 const SetOfColumnsForm = () => {
   const { state } = useLocation();
   // Destructure the data from the state object
@@ -310,12 +320,13 @@ const SetOfColumnsForm = () => {
               <tbody>
                 <tr>
                   <td colSpan="6">
-                    <img
-                      src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                      width={"800"}
-                      height={"250px"}
-                      alt={bridge.name}
-                      />
+                  <img 
+                              src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                              width={"800px"} 
+                              height={"250px"} 
+                              onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                              alt="Asset"
+                            />
                   </td>
                 </tr>
                 <tr>

@@ -1,0 +1,108 @@
+/* //////////// AddNewAsset Page ////////////////// */
+  
+  .AddNewAsset {
+    background-color: #E1E1E1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* טבלה להוספת נכס חדש */
+  .AddNewAssetTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .AddNewAssetTable input,
+  .AddNewAssetTable select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+
+  /* עיצוב לכפתור הגשה */
+  .ConfirmForm {
+    display: flex;
+    justify-content: center;
+  }
+  
+
+
+  .AddNewAsset {
+    width: 1000px;
+    background-color: #E1E1E1;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+  }
+  
+  .AddNewAsset p {
+    color: darkorange; /* Set the text color */
+    font-size: 24px; /* Set the font size */
+    font-weight: bold; /* Set the font weight */
+    margin-bottom: 20px; /* Set the margin at the bottom for spacing */
+  }
+  
+  .AddNewAssetTable {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .AddNewAssetTable td {
+    padding-left: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+  
+  .AddNewAssetTable p {
+    margin: 0;
+    font-size: 14px; /* Set a smaller font size */
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    top: -15px;
+  
+  }
+  
+  .AddNewAssetTable input {
+    width: 500px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .AddNewAssetTable select {
+    width: 500px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .AddNewAssetTable input:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 5px rgba(211, 84, 0, 0.5);
+  }
+  
+  .AddNewAssetTable select:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 5px rgba(211, 84, 0, 0.5);
+  }
+  
+  .AddNewAsset .required {
+    color: red;
+  }
+  
+  

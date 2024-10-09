@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import "./Modal.css";
+import "./CSS/Modal.css";
 import { BuildTreeSpine } from './BuildTreeSpine'; // Adjust the path accordingly
 import FolderTree from './FolderTree';
 
-
+/**
+ * TreeFolderConfirm component:
+ * This component provides a visual interface for managing and confirming the structure of a folder tree
+ * associated with a bridge asset. It supports adding, editing, and deleting folders within the tree and
+ * displays a real-time preview of changes. The component interacts with a backend API to fetch and update
+ * data stored in a MySQL database, ensuring synchronization between the client and server.
+ * The component includes modals for user confirmations (e.g., edit and delete actions) and displays 
+ * notifications and countdowns when changes are saved. It also allows users to generate a CSV file based 
+ * on the folder structure for download. The component adapts based on whether the user is in edit mode 
+ * or creating a new folder structure, offering full control over the tree's layout and data management.
+ */
 
 const TreeFolderConfirm = () => {
   const { state } = useLocation();
-
-
   const [lastSelectedNodeName, setLastSelectedNodeName] = useState('');
   const [additionalText, setAdditionalText] = useState('');
   const handleNodeSelect = (nodeName) => {
@@ -443,12 +451,13 @@ const handleActionSelect = (action) => {
                     <tbody>
                         <tr>
                             <td colSpan="6">
-                                <img
-                                src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                                width={"800"}
-                                height={"250px"}
-                                alt={bridge.name}
-                                />
+                            <img 
+                              src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                              width={"800px"} 
+                              height={"250px"} 
+                              onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                              alt="Asset"
+                            />
                                 <div className="text-overlay">
                                     <h3>{bridge.name}</h3>
                                 </div>

@@ -1,0 +1,54 @@
+.modal-content {
+    position: absolute;
+    top: 30%; /* Adjusted to create more space above */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    background: #f1f1f1;
+    padding: 20px 30px; /* Increased padding for a cleaner look */
+    border-radius: 3px;
+    max-width: 600px;
+    min-width: 300px;
+}
+
+.modal-content p {
+    white-space: pre-line;
+    padding-bottom: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Adds space between the buttons */
+    margin-top: 20px; /* Adds more space above the buttons */
+}
+
+.button-cancel {
+    background-color: red;
+    color: white;
+    padding: 10px 20px; /* Adjusted size for larger buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 40%;
+}
+
+.button-confirm {
+    background-color: green;
+    color: white;
+    padding: 10px 20px; /* Adjusted size for larger buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 40%;
+}
+
+.button-cancel:hover {
+    opacity: 0.6;
+}
+
+.button-confirm:hover {
+    opacity: 0.6;
+}

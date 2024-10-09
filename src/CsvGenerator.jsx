@@ -1,4 +1,39 @@
 import React, { useState, useEffect } from 'react';
+import './CSS/CsvGenerator.css';
+
+/*
+ * The CsvGenerator component is designed to generate and download a CSV file containing folder paths associated with a specific bridge asset.
+ * It provides either a button or an image (acting as a button) for users to trigger the download process based on the value of the `ImgOrButton` prop.
+ *
+ * Props:
+ * 1. **CSVBridge** (object): Represents the bridge data passed into the component, including details such as its bid (Bridge ID) and name.
+ * 2. **ImgOrButton** (string): Determines whether the component should render a button (`"Button"`) or an image (`"Image"`) for triggering the CSV download.
+ *
+ * Major Features:
+ * 1. **Data Fetching**:
+ *    - The component fetches folder data from an API endpoint (`http://localhost:8081/tbl_final_tree_spine`) on component mount.
+ *    - The fetched data is filtered based on the bridge ID (`CSVBridge.bid`) to include only relevant folders for the current bridge.
+ *
+ * 2. **CSV Download**:
+ *    - The `handleButtonClick` function formats the data into a CSV string and creates a downloadable file.
+ *    - It uses a `Blob` to store the CSV data and programmatically creates and clicks a download link to save the file.
+ *
+ * 3. **Dynamic Rendering**:
+ *    - The component renders either a button or an image based on the `ImgOrButton` prop:
+ *        - If `"Button"`, it shows a "Download CSV" button.
+ *        - If `"Image"`, it displays an image (paper clip) which acts as a button for downloading the CSV.
+ *    - The button and image also include hover effects to enhance user interaction.
+ *
+ * 4. **Hover Effect**:
+ *    - When the image is hovered over, an additional tooltip appears to indicate that the user can download the CSV file.
+ *
+ * 5. **Utility Functions**:
+ *    - `formatFoldersArray`: Filters and formats the folder paths related to the bridge into a CSV string.
+ *    - `formatArrayToString`: Converts the array of folder paths into a string, adding newline characters for CSV formatting.
+ *
+ * This component provides a simple and user-friendly interface for downloading folder structure data associated with a bridge in CSV format.
+ */
+
 
 const CsvGenerator = ({ CSVBridge, ImgOrButton }) => {
   const [dataTblFinallTreeSpineFolders, setDataTblFoldersFinallTreeSpineFolders] = useState([]); 

@@ -1,3 +1,28 @@
+
+/*
+ * The BuildTreeSpine component is designed to construct a hierarchical tree structure for bridge elements
+ * based on input parameters such as initial data, previous page data, and directory values. 
+ * It generates a structured representation of folders for different bridge components which are later 
+ * used for CSV generation or further processing in the application.
+ *
+ * The component consists of:
+ * 1. **formatFoldersArray**: Constructs an array of folders and subfolders based on the provided bridge data and folder configuration (e.g., spans, bearings, abutments). It processes bridge-specific attributes and conditions to determine the exact structure needed.
+ * 2. **formatArrayToString**: Converts the array from `formatFoldersArray` into a formatted string suitable for CSV storage, adding indices and maintaining a structured format.
+ * 3. **convertArrayToDic**: Converts an array of folder paths into a nested object/dictionary format. This is useful for building tree-like structures for displaying folders in a hierarchical manner.
+ * 4. **addRowsToArray**: Splits a formatted string into an array of rows while filtering out any empty lines. This helps convert the CSV-like structure back into an array for processing.
+ *
+ * The component has two modes:
+ * - **Edit mode (edit = true)**: It returns the folder structure as a tree based on existing values directly.
+ * - **Creation mode (edit = false)**: It builds the folder structure from scratch using the input data and formats it accordingly.
+ *
+ * Key Features:
+ * - Dynamic handling of bridge attributes such as span count, abutment count, and bearings.
+ * - Conditional folder creation for directional elements like sides and guard rails based on the bridge orientation (N/S or E/W).
+ * - Support for adding subfolders dynamically based on configuration settings.
+ * - String formatting for easy conversion to and from CSV format.
+ */
+
+
 const BuildTreeSpine = ({ values, perviousPageData, Directories_values, edit}) => {
 
   const formatFoldersArray = () => {

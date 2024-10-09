@@ -1,0 +1,93 @@
+/* LogIn.css */
+
+.login-page {
+    background-image: url('/images/Login_BG.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.login-container {
+    background-color: #f3f3f3;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.login-header {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.login-input-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+.login-input {
+    width: 90%;
+    padding: 10px;
+    padding-left: 40px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 1px;
+    top: 58%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.login-button {
+    width: 103%;
+    padding: 10px;
+    background-color: #ff6b00;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #e65c00;
+}
+
+.login-header {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 5px; /* מקטין את המרווח בין הכותרות */
+}
+
+.login-subheader {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 20px;
+}
+

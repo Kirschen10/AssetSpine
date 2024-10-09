@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, useLocation} from 'react-router-dom';
 
+/**
+ * SpanCountForm component:
+ * This component handles the input and management of information related to the spans and their associated girders
+ * for a specific bridge asset. It fetches necessary data from the server to populate the form with either existing
+ * or default values based on the edit or create mode. Users can input or modify quantities for each span and girder 
+ * row manually or through increment/decrement buttons. The form supports validation and navigation between different
+ * steps, ensuring data integrity and consistency while the user progresses through the process of asset creation or editing.
+ * The component utilizes URL parameters to determine the bridge and the relevant spans, and state to manage the user's input data.
+ */
+
 const SpanCountForm = () => {
   
   const { bridgeID, bridgeSpanCount, AbutmentCount, SetOfColumns, Lanes, id} = useParams();
@@ -288,12 +298,13 @@ const renderInputs = () => {
               <tbody>
                 <tr>
                   <td colSpan="6">
-                    <img
-                      src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                      width={"800"}
-                      height={"250px"}
-                      alt={bridge.name}
-                      />
+                  <img 
+                    src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                    width={"800px"} 
+                    height={"250px"} 
+                    onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                    alt="Asset"
+                  />
                   </td>
                 </tr>
                 <tr>

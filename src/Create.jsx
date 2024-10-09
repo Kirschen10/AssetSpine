@@ -2,6 +2,44 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory, useLocation} from 'react-router-dom';
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import './CSS/Create.css';
+
+/*
+ * The Create component is designed for managing and configuring the settings of a bridge asset within the application.
+ * It provides a user interface for setting parameters such as the number of spans, abutments, columns, arches, and other structural
+ * details, and it uses Google Maps to display the bridge's location. The form can be submitted to save or update the asset's configuration.
+ *
+ * Major Features:
+ * 1. **State Initialization**:
+ *    - The component uses React's state to manage form inputs, loading states, and warnings.
+ *    - Various counts (e.g., span count, abutment count) and directional options (N/S or E/W) are configurable.
+ *    - A toggle is available for units (meters or feet) to support different measurement preferences.
+ *
+ * 2. **Modal Warnings**:
+ *    - Multiple modal popups are used to warn or confirm user actions:
+ *        - **Direction Warning**: Prompts users if the cardinal direction for the bridge isn't set.
+ *        - **Form Validation Warning**: Alerts if critical fields like span, abutment, columns, and lanes counts are zero.
+ *        - **Change Confirmation**: Confirms if the user wants to proceed with modifications when existing data differs from the new input.
+ *
+ * 3. **Google Maps Integration**:
+ *    - The component integrates a Google Map to show the bridge’s location based on latitude and longitude.
+ *    - The map type is set to 'satellite' for detailed visual representation.
+ *
+ * 4. **Data Fetching and Handling**:
+ *    - Fetches data for bridge details, initial settings, and survey information from the server.
+ *    - Determines if the asset already exists and pre-fills form fields with existing values when in edit mode.
+ *
+ * 5. **Form Submission**:
+ *    - The handleSubmit function manages form submission, validating input values and determining the next path based on the user's selections.
+ *    - If existing data is modified, it prompts the user for confirmation.
+ *
+ * 6. **Dynamic Input Controls**:
+ *    - Increment and decrement buttons are provided for all input fields to adjust counts (e.g., spans, abutments) easily.
+ *    - An image overlay is shown for additional information about bridge components when hovering over a help button.
+ *
+ * The component ensures user-friendly interaction with various bridge configurations while maintaining validation checks and warnings
+ * to prevent invalid submissions.
+ */
 
 const Create = () => {
   // Extract the state (including values) from the location object
@@ -16,6 +54,7 @@ const Create = () => {
   const [dataSurvey,setdataSurvey] = useState([]);
   const { values ,perviousPageData } = state || {};
   const [isImageVisible, setImageVisible] = useState(false);
+
   ////////// Modal - popup /////////////////
 
    // New state for confirmation popup
@@ -82,7 +121,7 @@ const Create = () => {
     const bridge = data.find((bridge) => parseInt(bridge.bid, 10) === parseInt(bid, 10));
     const isExist = dataEdit.find((bridge) => bridge.Bid === bid);
 
-  const allSurveyID = dataSurvey.find((bridge1) => parseInt(bridge1.bid, 10) === parseInt(bridge.bid, 10) && bridge1.process_template_name === 'Initial inspection');
+    const allSurveyID = dataSurvey.find((bridge1) => parseInt(bridge1.bid, 10) === parseInt(bridge.bid, 10) && bridge1.process_template_name === 'Initial inspection');
 
 
     const [spanCount, setSpanCount] = useState('0');
@@ -95,6 +134,12 @@ const Create = () => {
     const surveyID = allSurveyID?.id || "";
     const [direction, setDirection] = useState("")
     const [firstTime,setFirstTime ] = useState(true);
+    const [unit, setUnit] = useState('meters');
+
+    const handleUnitChange = () => {
+      setUnit((prevUnit) => (prevUnit === 'meters' ? 'feet' : 'meters'));
+    };
+  
 
     useEffect(() => {
         if(values && firstTime === true){
@@ -106,6 +151,7 @@ const Create = () => {
             setLanes(parseInt(values.Lanes, 10));
             setParapetsCount(parseInt(values.Parapets_Count, 10));
             setDirection(values.Direction);
+            setUnit(values.Unit);
             setFirstTime(false);
         }
         else if(isExist && firstTime === true){
@@ -117,6 +163,7 @@ const Create = () => {
             setLanes(parseInt(isExist.Lanes, 10));
             setParapetsCount(parseInt(isExist.Parapets_Count, 10));
             setDirection(isExist.Direction);
+            setUnit(isExist.Unit);
             setFirstTime(false);
         }
     });
@@ -267,7 +314,7 @@ const handleSubmit = (e) => {
   
     const values_edit = {
       Bid: bridge.bid,
-      name: name,
+      name: bridge.name,
       Survey_ID: surveyID,
       Bridge_Type: bridge.bridge_type,
       Structure_Name: bridge.structure_name,
@@ -279,7 +326,8 @@ const handleSubmit = (e) => {
       Arches_Connectors: archesConnectors,
       Lanes: lanes,
       Parapets_Count: parapetsCount,
-      Direction : direction
+      Direction : direction,
+      Unit: unit
     };
     if(direction === "")
     {
@@ -348,7 +396,7 @@ const handleConfirmation = (confirmed) => {
   
     const values_edit = {
       Bid: bridge.bid,
-      name: name,
+      name: bridge.name,
       Survey_ID: surveyID,
       Bridge_Type: bridge.bridge_type,
       Structure_Name: bridge.structure_name,
@@ -360,7 +408,8 @@ const handleConfirmation = (confirmed) => {
       Arches_Connectors: archesConnectors,
       Lanes: lanes,
       Parapets_Count: parapetsCount,
-      Direction : direction
+      Direction : direction,
+      Unit: unit
     };
 
     // Handle user's response from the confirmation popup
@@ -394,11 +443,12 @@ const handleConfirmation = (confirmed) => {
                   <tbody>
                   <tr>
                                 <td colSpan="6">
-                                    <img
-                                    src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                                    width={"600px"}
-                                    height={"250px"}
-                                    alt={bridge.name}
+                                <img 
+                                        src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                                        width={"600px"} 
+                                        height={"250px"} 
+                                        onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                                        alt="Asset"
                                     />
                                     <div className="text-overlay">
                                         <h3>{bridge.name}</h3>
@@ -642,6 +692,20 @@ const handleConfirmation = (confirmed) => {
                                             </button>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td style={{width:"150px"}}>
+                                            <label style={{ marginRight: '8px' }}>Choose Unit:</label>
+                                        </td>
+                                        <td style={{ width: "200px" }}>
+                                            <div className="unit-toggle">
+                                                <label className="switch">
+                                                    <input type="checkbox" onChange={handleUnitChange}  />
+                                                    <span className="slider round" ></span>
+                                                </label>
+                                                <span>{unit === 'meters' ? 'Meters' : 'Feet'}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <br></br>
                                     <tr>
                                         <td colSpan={3}>
@@ -666,7 +730,7 @@ const handleConfirmation = (confirmed) => {
                   <h1>Loading...</h1>
                 ) : (
                   <GoogleMap
-                    mapContainerClassName="map-container"
+                    mapContainerClassName="map-container-Create"
                     center={{ lat: parseFloat(lat), lng: parseFloat(lon) }}
                     zoom={18}
                     mapTypeId='satellite'
@@ -674,7 +738,7 @@ const handleConfirmation = (confirmed) => {
                   </GoogleMap>
                 )}
               </div>
-                <div className="radio-buttons" style={{float: 'right'}}>
+                <div className="radio-buttons" >
                     <img src="/images/compass.png" alt="compass" style={{width:'30px', height:'30px', backgroundColor:"#E1E1E1"}}/>
                     <label>Cardinal directions (sides) for structure:</label>
                     <input type="radio" id="N/S" name="direction" value="N/S" checked={direction === "N/S"} onChange={(e) => setDirection(e.target.value)}></input>  
@@ -684,15 +748,17 @@ const handleConfirmation = (confirmed) => {
                 </div>
             </div>
           </div>
+          <br />
+          <br />
+          <br />
+          <br />
           <div className='ConfirmForm'>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   {!isLoading && (
-                    <button onClick={handleSubmit}>Next</button>
+                    <button onClick={handleSubmit} className='NextButton'>Next</button>
                   )}
                   {isLoading && (
                     <button disabled>Working...</button>
                   )}
-                </div>
               </div>
         </div>
       ) : (
@@ -724,7 +790,7 @@ const handleConfirmation = (confirmed) => {
           </div>
         </div>
       )}
-{changeWarning && (
+{changeWarning &&(
   <div className="modal">
     <div className="modal-content">
       <h2>Confirmation</h2>
@@ -749,7 +815,7 @@ const handleConfirmation = (confirmed) => {
             display: 'block',
             position: 'fixed',
             top: '50%',
-            left: '50%',
+            left: '65%',
             transform: 'translate(-50%, -50%)',
           }}
         />

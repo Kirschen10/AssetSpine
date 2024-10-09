@@ -1,14 +1,32 @@
 import { useParams, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import CsvGenerator from './CsvGenerator';
 import { BuildTreeSpine } from './BuildTreeSpine';
 import FolderTree from './FolderTree';
-import "./Modal.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import './CSS/BridgeInfo.css';
+import Popup from "./Popup";
+
+/*
+ * This component, BridgeInfo, displays detailed information about a specific bridge asset.
+ * It fetches data about the bridge, its settings, and its structure from the backend,
+ * and provides several actions like updating the details, deleting the asset, or creating/editing
+ * the bridge spine (structure). 
+ * 
+ * The component is divided into several main sections:
+ * 1. Data Fetching: Fetches data from the backend (bridge details, initial settings, and folders).
+ * 2. Event Handlers: Defines various functions to handle actions such as navigation, deletion, and creation of the bridge spine.
+ * 3. Tree Spine Structure: Displays the structure of the bridge in a tree format using the FolderTree component.
+ * 4. Popup Modals: Shows confirmation popups for actions like editing or deleting the asset.
+ * 5. Render: The render section contains the JSX layout, displaying the bridge details, buttons for actions, and conditionally rendered sections based on the existence of data.
+ */
 
 const BridgeInfo = () => {
     const { name, bid, id } = useParams();
     const history = useHistory();
-console.log(bid);
+
     const [data,setData] = useState([]);
     const [dataEdit,setDataEdit] = useState([]);
     const [dataTblFolder, setDataTblFolder] = useState([]);
@@ -39,7 +57,7 @@ console.log(bid);
 
     const bridge = data.find((bridge) => parseInt(bridge.bid, 10) === parseInt(bid, 10));
     const isExist = dataEdit.find((bridge) => bridge.Bid === bid);
-    console.log(bridge);
+
     const onClickCreateSpine = (bridgeName,lat,lon) => {
         if(isExist){
             history.push(`/Create/${bid}/${lat}/${lon}/${id}/Edit_mode`);
@@ -81,6 +99,7 @@ console.log(bid);
 
     const [addAction, setAddAction] = useState(true);
     const [editAction, setEditAction] = useState(false);
+
     const handleActionSelect = (action) => {
         if( action === "Add"){
             setAddAction(true);
@@ -96,6 +115,7 @@ console.log(bid);
     };
 
     const [editWarning, setEditWarning] = useState(false);
+    const [deleteWarning, setDeleteWarning] = useState(false);
 
     const handleEditWarning  = () => {
       setEditWarning(!editWarning);
@@ -112,6 +132,44 @@ console.log(bid);
             onClickCreateSpine(bridge.name, bridge.lat, bridge.lon);
         }
       }
+
+      const handleDeleteAsset = () => {
+        axios.delete(`http://localhost:8081/tbl_folders/${bid}`)
+          .then((res) => {
+            console.log("Deleted from tbl_folders");
+          })
+          .catch(err => console.log(err));
+      
+        axios.delete(`http://localhost:8081/tbl_initial_settings/${bid}`)
+          .then((res) => {
+            console.log("Deleted from tbl_initial_settings");
+          })
+          .catch(err => console.log(err));
+      
+        axios.delete(`http://localhost:8081/tbl_advanced_settings/${bid}`)
+          .then((res) => {
+            console.log("Deleted from tbl_advanced_settings");
+          })
+          .catch(err => console.log(err));
+
+        axios.delete(`http://localhost:8081/tbl_asset_spine/${bid}`)
+        .then((res) => {
+        console.log("Deleted from tbl_asset_spine");
+        })
+        .catch(err => console.log(err));
+      
+        axios.delete(`http://localhost:8081/tbl_final_tree_spine/${bid}`)
+          .then((res) => {
+            console.log("Deleted from tbl_final_tree_spine");
+            history.push(`/Home/${id}`);
+          })
+          .catch(err => console.log(err));
+      };
+
+      const handleNavigateToEdit = () => {
+        history.push(`/EditAsset/${bid}/${id}`);
+      };
+    
     return (
         <div className="bridge-details">
     {loading ? (
@@ -119,43 +177,78 @@ console.log(bid);
     ) : bridge ? (
                <article>
                <h2>{bridge.name}</h2>
-               <table align="center" className="bridge-info-table" max-width="100%" style={{width:'100%', overflowX:'auto'}}>
-                   <thead>
-                       <tr>
-                           <th style={{backgroundColor:"grey", color:"white"}}>Description</th>
-                           <th style={{backgroundColor:"grey", color:"white"}}>Location</th>
-                           <th style={{backgroundColor:"grey", color:"white"}}>Latitude</th>
-                           <th style={{backgroundColor:"grey", color:"white"}}>Longitude</th>
-                           <th style={{backgroundColor:"grey", color:"white"}}>Spans</th>
-                           <th style={{backgroundColor:"grey", color:"white"}}>Structure Name</th>
-                       </tr>
-                   </thead>
-                       <tr style={{backgroundColor:"#E1E1E1"}}>
-                           <td>{bridge.description}</td>
-                           <td>{bridge.location}</td>
-                           <td>{bridge.lat}</td>
-                           <td>{bridge.lon}</td>
-                           <td>{bridge.spans}</td>
-                           <td>{bridge.structure_name}</td>
-                       </tr>
-                   </table>
+               <div className="table-button-container">
+                    <table align="center" className="bridge-info-table" max-width="100%" style={{width:'100%', overflowX:'auto'}}>
+                        <thead>
+                            <tr>
+                                <th style={{backgroundColor:"grey", color:"white"}}>Description</th>
+                                <th style={{backgroundColor:"grey", color:"white"}}>Location</th>
+                                <th style={{backgroundColor:"grey", color:"white"}}>Latitude</th>
+                                <th style={{backgroundColor:"grey", color:"white"}}>Longitude</th>
+                                <th style={{backgroundColor:"grey", color:"white"}}>Spans</th>
+                                <th style={{backgroundColor:"grey", color:"white"}}>Structure Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style={{backgroundColor:"#E1E1E1"}}>
+                                <td>{bridge.description}</td>
+                                <td>{bridge.location}</td>
+                                <td>{bridge.lat}</td>
+                                <td>{bridge.lon}</td>
+                                <td>{bridge.spans}</td>
+                                <td>{bridge.structure_name}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className="buttons-container">
+                        <button style={{backgroundColor:"darkOrange"}} onClick={handleNavigateToEdit}>
+                          <FontAwesomeIcon icon={faEdit} style={{marginRight: '8px'}} />
+                          Update Details
+                        </button>
+                        <button style={{backgroundColor:"red"}} onClick={() =>setDeleteWarning(true)}>
+                            <FontAwesomeIcon icon={faTrash} style={{marginRight: '8px'}} />
+                            Delete Asset
+                        </button>
+                    </div>
+                </div>
                    <br />
                <div className="container-bridgeInfo">
                    <div className="left-part">
                        <table>
                            <tr>
-                               <td><img src={bridge.image_url ? bridge.image_url : '/images/No-Image-Available.png'} width={"500px"} height={"250px"} /></td>
                                <td>
-                                   {!isExist && <button className="button" onClick={() => onClickCreateSpine(bridge.name, bridge.lat, bridge.lon)} ><span>Create Asset Spine</span></button>}
-                                   {isExist && <button className="button"  onClick={() => onClickEditSpine(bridge.bid)} style={{ backgroundColor: "gray", verticalAlign:"middle"}}><span>Edit Tree Spine</span></button>}   
-                                   <br />
-                                   {isExist && <button className="button"  onClick={handleEditWarning} style={{ backgroundColor: "darkorange", verticalAlign:"middle"}}><span>Recreate Asset Spine</span></button>}   
-                                   <br />
+                               <img 
+                                  src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                                  width={"500px"} 
+                                  height={"250px"} 
+                                  onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                                  alt="Asset"
+                                />
+                               </td>
+                               <td>
+                               {!isExist && (
+                                    <button className="button-common button-green" onClick={() => onClickCreateSpine(bridge.name, bridge.lat, bridge.lon)}>
+                                        <span>Create Asset Spine</span>
+                                    </button>
+                                )}
+                                {isExist && (
+                                    <button className="button-common button-gray" onClick={() => onClickEditSpine(bridge.bid)}>
+                                        <span>Edit Tree Spine</span>
+                                    </button>
+                                )}   
+                                <br />
+                                {isExist && (
+                                    <button className="button-common button-orange" onClick={handleEditWarning}>
+                                        <span>Recreate Asset Spine</span>
+                                    </button>
+                                )}   
+                                <br />
                                    {isExist && <CsvGenerator CSVBridge={bridge} ImgOrButton='Button' />}
                                </td>
                            </tr>
                        </table>
                    </div>
+                   <div className="separator"></div>
                    {isExist && <div className="right-part">
                    <br />
                    <h2>Folder Tree Spine </h2>
@@ -168,26 +261,18 @@ console.log(bid);
     ) : (
         <p>Asset not found</p>
     )}
-          {editWarning && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Edit Confirmation</h2>
-            <p>Editing the data will make irreversible changes, in addition all the changes you made manually will be deleted.</p>
-            <br />
-            <p> Are you sure you want to proceed?</p>
-            <br />
-            <button className="close-modal" style={{ border: "none", backgroundColor: "#f1f1f1" }} onClick={handleEditWarning}>
-              <img src="/images/clear.png" width={'20px'} alt="Close" />
-            </button>
-            <div className='ConfirmForm'>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <button onClick={() => handleConfirmation(true)} style={{backgroundColor:"darkorange"}}>Edit</button>
-                  <button onClick={() => setEditWarning(!editWarning)} style={{backgroundColor:"green"}}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+          {editWarning && <Popup 
+                              title="Edit Confirmation" 
+                              content={
+                                  <>
+                                      <p>Editing the data will make irreversible changes, in addition all the changes you made manually will be deleted.</p>
+                                      <p>Are you sure you want to proceed?</p>
+                                  </>
+                              }
+                              onClose={() => setEditWarning(!editWarning)} 
+                              onConfirm={() => handleConfirmation(true)} 
+                          />}
+      {deleteWarning && <Popup title="Deletion alert" content="This operation is irreversible. Are you sure you want to delete?" onClose={()=>setDeleteWarning(false)} onConfirm={handleDeleteAsset} />}
 </div>
     )
 }

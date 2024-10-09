@@ -1,0 +1,47 @@
+
+.input-container {
+    position: relative;
+    display: flex;
+    height: 2.8rem;
+  
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, .05);
+  }
+  
+  .input-container input {
+    border-radius: 8px 0 0 8px; /* Rounded only on the left side */
+    border: 0px solid  rgb(176 190 197);
+    background-color: transparent;
+    padding: 0.625rem 70px 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+    color: rgb(69 90 100);
+    outline: none;
+    transition: all .15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .input-container input:placeholder-shown ~ .invite-btn-edit {
+    pointer-events: none;
+    background-color: orange;
+    opacity: 0.5;
+  }
+  
+  .input-container input:placeholder-shown ~ .invite-btn {
+    pointer-events: none;
+    background-color: green;
+    opacity: 0.5;
+  }
+
+  /* accessible' : 'inaccessible' in Tree Folder*/
+
+.inaccessible {
+  pointer-events: none;
+  opacity: 0.5; /* Optionally reduce opacity to indicate it's disabled */
+}
+
+.accessible {
+  pointer-events: auto;
+  opacity: 1; /* Reset opacity when accessible */
+}

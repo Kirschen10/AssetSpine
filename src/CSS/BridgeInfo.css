@@ -1,0 +1,130 @@
+.container-bridgeInfo {
+
+    display: flex;
+  }
+  
+  .left-part {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E1E1E1; 
+  }
+  
+  .right-part {
+    width: 500px; /* Set a fixed width for the right part */
+    flex: 1;
+    background-color: #E1E1E1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .BridgeInfo img {
+    width: 500px;
+    height: 500px;
+  }
+  
+  .bridge-details h2 {
+    color: darkorange;
+    /*text-align: center;*/
+    padding-bottom: 10px ;
+  }
+  
+  .bridge-info-table th,
+  .bridge-info-table td {
+      padding: 12px 15px;
+      text-align: center;   
+  }
+  
+  
+  .bridge-details button {
+    color: white;
+    border: 0;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+  }
+
+  .table-button-container {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    width: 100%;
+}
+
+
+.buttons-container {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px; 
+    margin-left: 20px; 
+}
+
+.buttons-container button {
+  width: 170px; 
+  padding: 10px; 
+  font-size: 16px; 
+}
+
+.buttons-container button:hover {
+  opacity: 0.7;
+}
+
+.container-bridgeInfo .left-part td {
+  padding-left: 20px;
+}
+
+.container-bridgeInfo .left-part img {
+  margin-right: 20px; 
+}
+  
+.separator {
+  width: 2px; /* עובי הקו */
+  background-color: white; /* צבע הקו */
+
+}
+
+.button-common {
+  display: inline-block;
+  position: relative;
+  padding: 10px 25px;
+  color: white;
+  font-family: sans-serif;
+  text-decoration: none;
+  font-size: 0.9em;
+  text-align: center;
+  border: none;
+  width: 300px;
+  height: 50px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button-green {
+  background-color: #4CAF50;
+}
+
+.button-green:hover {
+  background-color: #45a21a;
+}
+
+.button-gray {
+  background-color: gray;
+}
+
+.button-gray:hover {
+  background-color: #6c757d;
+}
+
+.button-orange {
+  background-color: darkorange;
+}
+
+.button-orange:hover {
+  background-color: #e67e22;
+}

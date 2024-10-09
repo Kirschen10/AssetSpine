@@ -278,12 +278,13 @@ const Lanes = () => {
               <tbody>
                 <tr>
                   <td colSpan="6">
-                    <img
-                      src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                      width={"800"}
-                      height={"250px"}
-                      alt={bridge.name}
-                      />
+                  <img 
+                      src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                      width={"800px"} 
+                      height={"250px"} 
+                      onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                      alt="Asset"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -339,3 +340,69 @@ const Lanes = () => {
 };
 
 export default Lanes;
+
+/*
+ * The Lanes component is a React component that handles the user input for the number of lanes (carriageways) for a specific bridge asset. It allows users to input, update, and submit the number of lanes for the selected bridge. It also supports navigation based on previous and next steps in the form process.
+ *
+ * Parameters:
+ * - `bridgeID`: The ID of the bridge asset (from the URL).
+ * - `Lanes`: The initial number of lanes (from the URL).
+ * - `id`: The user ID (from the URL).
+ *
+ * State Variables:
+ * 1. **isImageVisible (Boolean)**:
+ *    - Controls the visibility of an informational image that appears when the user hovers over a button.
+ *
+ * 2. **loading (Boolean)**:
+ *    - Indicates if the data is currently loading. Displays a loading message until data fetch completes.
+ *
+ * 3. **isLoading (Boolean)**:
+ *    - Used for the submit button to show whether the form is being processed.
+ *
+ * 4. **numberOfInputs (Number)**:
+ *    - Determines the number of input fields based on the number of lanes.
+ *
+ * 5. **formData (Array)**:
+ *    - Holds the current state of the form data for each lane, including the quantity and other lane-related properties.
+ *
+ * 6. **data, dataTblInitialSettings, dataTblAdvancedSettings (Arrays)**:
+ *    - Store the fetched data for bridge assets, initial settings, and advanced settings, respectively.
+ *
+ * Functions:
+ * 1. **ChangeFromBackPage (Function)**:
+ *    - Updates the form data based on previous page data when navigating back to this component.
+ *
+ * 2. **Change (Function)**:
+ *    - Updates the form data based on data fetched from the `tbl_advanced_settings` table if available.
+ *
+ * 3. **handleInputChange (Function)**:
+ *    - Updates the form data when the user manually changes the input value for a specific lane.
+ *
+ * 4. **handleIncrement and handleDecrement (Functions)**:
+ *    - Increment or decrement the quantity of lanes for the specified index when users click the plus or minus buttons.
+ *
+ * 5. **handleSubmit (Function)**:
+ *    - Handles the form submission, sets the loading state, and navigates to the next page based on form values and conditions.
+ *
+ * 6. **determineNextPath (Function)**:
+ *    - Determines the next route based on whether the bridge already has existing data in the `tbl_initial_settings`.
+ *
+ * 7. **handleBack (Function)**:
+ *    - Navigates back to the previous step in the form flow, depending on the current state and previously entered values.
+ *
+ * 8. **renderInputs (Function)**:
+ *    - Renders the input fields dynamically based on the number of lanes specified. Includes buttons for incrementing and decrementing values and handles quantity input.
+ *
+ * useEffect Hooks:
+ * - Fetches bridge data, initial settings, and advanced settings when the component mounts.
+ * - Updates the form data when previous page data is available or based on existing advanced settings in the database.
+ *
+ * JSX Structure:
+ * 1. Displays the bridge name and image.
+ * 2. Shows a form with dynamically generated input fields for the number of lanes.
+ * 3. Provides buttons for navigating to the next or previous steps.
+ * 4. Displays an informational image when the user hovers over a button.
+ *
+ * This component is part of a multi-step form workflow that collects detailed information about bridge assets, particularly the configuration of lanes.
+ */
+

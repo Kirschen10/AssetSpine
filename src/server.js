@@ -1,6 +1,16 @@
 const express = require('express');
-const mysql = require('mysql')
-const cors  =require('cors')
+const mysql = require('mysql');
+const cors  =require('cors');
+const multer = require('multer');
+
+// Configure multer storage
+const storage = multer.memoryStorage(); // or configure diskStorage if you want to save files on disk
+
+// Initialize multer with the configured storage
+const upload = multer({ 
+  storage, 
+  limits: { fileSize: 1024 * 1024 * 10 }  // העלאת קובץ בגודל מקסימלי של 10MB
+});
 
 const app = express()
 app.use(cors());
@@ -11,7 +21,30 @@ const db = mysql.createConnection({
     user:'manam',
     password:'1122334455',
     database:'db_3dbia_11_studio'
-})
+});
+
+/////////// LogIn ////////////////////////
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+      return res.status(400).json({ message: 'Missing username or password' });
+  }
+
+  const query = 'SELECT * FROM tbl_users WHERE email = ? AND password = ?';
+  db.query(query, [username, password], (err, result) => {
+      if (err) {
+          return res.status(500).json({ message: 'Server error' });
+      }
+
+      if (result.length > 0) {
+          return res.status(200).json({ message: 'Login successful', userId: result[0].id });
+      } else {
+          return res.status(401).json({ message: 'Invalid credentials' });
+      }
+  });
+});
 
 ///////////// Get commands ////////////////////
 
@@ -25,6 +58,15 @@ app.get('/tbl_asset_spine', (re,res) => {
         if(err) res.json(err);
         return res.json(data);
     })
+})
+
+app.get('/tbl_asset_spine/:bid', (req,res) => {
+  const bid = req.params.bid;
+  const sql = "SELECT * FROM tbl_asset_spine WHERE bid = ? ";
+  db.query(sql, [bid], (err, data) => {
+      if(err) res.json(err);
+      return res.json(data);
+  })
 })
 
 app.get('/tbl_users', (re,res) => {
@@ -75,9 +117,19 @@ app.get('/tbl_final_tree_spine', (re,res) => {
   })
 })
 
-app.listen(8081, () => {
-    console.log("Listening...");
-})
+app.get('/image/:bid', (req, res) => {
+  const bid = req.params.bid;
+  const sql = "SELECT image FROM tbl_asset_spine WHERE bid = ?";
+  
+  db.query(sql, [bid], (err, result) => {
+      if (err || result.length === 0 || !result[0].image) {
+          return res.status(404).sendFile('/path/to/default/image.png'); // In case there is no image or if there is an error
+      }
+
+      res.set('Content-Type', 'image/jpeg');  // Match the image type to the information coming from the server
+      res.send(result[0].image);
+  });
+});
 
 ///////////// Delete commands ////////////////////
 
@@ -137,33 +189,60 @@ app.delete('/tbl_folders/:Bid', (req, res) => {
     });
   });
 
+  app.delete('/tbl_asset_spine/:bridge_id', (req, res) => {
+    const bidToDelete = req.params.bridge_id;
+    const sql = "DELETE FROM tbl_asset_spine WHERE bid = ?";
+  
+    db.query(sql, [bidToDelete], (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json({ message: "Rows deleted successfully", affectedRows: result.affectedRows });
+      }
+    });
+  });
+
 
 ///////////// Post commands ////////////////////
 
-app.post('/tbl_asset_spine', (req, res) => {
-  const sql = "INSERT INTO tbl_asset_spine (name, structure_name, spans, description, organization, lon, lat, added_by_user,image, bridge_type, field1, location) VALUES (?)";
+app.post('/tbl_asset_spine', upload.single('image'), (req, res) => {
+  console.log('Request body:', req.body);
+  console.log('Uploaded file:', req.file);  // הדפסת מידע על הקובץ שהועלה
+
+  const { name, structure_name, spans, description, organization, lon, lat, added_by_user, bridge_type, field1, location } = req.body;
+  const image = req.file ? req.file.buffer : null;
+
+  const lonValue = lon ? parseFloat(lon) : null;
+  const latValue = lat ? parseFloat(lat) : null;
+
+  const sql = "INSERT INTO tbl_asset_spine (name, structure_name, spans, description, organization, lon, lat, added_by_user, image, bridge_type, field1, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [
-      req.body.name,
-      req.body.structure_name,
-      req.body.spans,
-      req.body.description,
-      req.body.organization,
-      req.body.lon,
-      req.body.lat,
-      req.body.added_by_user,
-      req.body.image,
-      req.body.bridge_type,
-      req.body.field1,
-      req.body.location,
-  ]
-  db.query(sql, [values], (err, data) => {
-      if(err) return res.json(err);
-      return res.json(data);
-  })
+      name,
+      structure_name,
+      spans,
+      description,
+      organization,
+      lonValue,
+      latValue,
+      added_by_user,
+      image,
+      bridge_type,
+      field1,
+      location
+  ];
+
+  db.query(sql, values, (err, data) => {
+      if (err) {
+          console.error('Database error:', err);
+          return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      return res.status(200).json(data);
+  });
 });
-  
+
 app.post('/tbl_initial_settings', (req, res) => {
-    const sql = "INSERT INTO tbl_initial_settings (Bid, name, Survey_ID, Bridge_Type, Structure_Name, Main_Road, Span_Count, Abutment_Count, Set_Of_Columns,Arches_Count, Arches_Connectors, Lanes, Parapets_Count, Direction) VALUES (?)";
+    const sql = "INSERT INTO tbl_initial_settings (Bid, name, Survey_ID, Bridge_Type, Structure_Name, Main_Road, Span_Count, Abutment_Count, Set_Of_Columns,Arches_Count, Arches_Connectors, Lanes, Parapets_Count, Direction, Unit) VALUES (?)";
     const values = [
         req.body.Bid,
         req.body.name,
@@ -179,6 +258,7 @@ app.post('/tbl_initial_settings', (req, res) => {
         req.body.Lanes,
         req.body.Parapets_Count,
         req.body.Direction,
+        req.body.Unit,
     ]
     db.query(sql, [values], (err, data) => {
         if(err) return res.json(err);
@@ -252,6 +332,47 @@ app.post('/tbl_final_tree_spine', (req, res) => {
     });
   });
 
-  app.listen(8082, () => {
-    console.log("Listening on port 8082...");
+
+  ///////////// Put commands ////////////////////
+
+  app.put('/tbl_asset_spine/:bid', upload.single('image'), (req, res) => {
+    const bid = req.params.bid;
+    const { name, structure_name, spans, description, organization, lon, lat, bridge_type, field1, location } = req.body;
+
+    const image = req.file ? req.file.buffer : null;
+
+    const sql = `
+        UPDATE tbl_asset_spine 
+        SET 
+            name = ?, 
+            structure_name = ?, 
+            spans = ?, 
+            description = ?, 
+            organization = ?, 
+            lon = ?, 
+            lat = ?, 
+            bridge_type = ?, 
+            field1 = ?, 
+            location = ?, 
+            image = ?
+        WHERE bid = ?
+    `;
+
+    db.query(sql, [name, structure_name, spans, description, organization, lon, lat, bridge_type, field1, location, image, bid],
+       (err, result) => {
+        if (err) {
+            console.error("Error updating asset:", err);
+            return res.status(500).json({ error: "Error updating asset" });
+        }
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Asset not found" });
+        }
+
+        res.json({ message: "Asset updated successfully" });
+    });
+});
+
+  app.listen(8081, () => {
+    console.log("Listening on port 8081...");
 });

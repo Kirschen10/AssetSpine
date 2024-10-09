@@ -1,9 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import "./Modal.css";
+import "./CSS/Modal.css";
+import './CSS/EditSpine.css';
 import FolderTree from './FolderTree';
 import { BuildTreeSpine } from './BuildTreeSpine';
+
+/*
+ * The EditSpine component provides a user interface for editing and managing the folder structure of an asset's spine (e.g., a bridge's structure). It allows users to view, add, edit, and delete folders while providing feedback and warnings when performing irreversible actions.
+ *
+ * Key Functionalities:
+ * 1. **Data Fetching and Initialization**:
+ *    - Fetches the existing asset and folder data using Axios (`axios.get`) and initializes state values based on the fetched data (e.g., tree structure, folder paths).
+ *
+ * 2. **Folder Tree Management**:
+ *    - Users can select nodes (folders) within the folder tree (`handleNodeSelect`) and perform actions like adding (`handleAddFolder`), editing (`handleEditFolder`), or deleting folders (`handleDeleteFolder`).
+ *    - The component uses the `FolderTree` and `BuildTreeSpine` utilities to construct and manage the folder structure.
+ *    - Provides input validation for folder naming to ensure proper formatting and structure.
+ *
+ * 3. **Modals and Confirmation**:
+ *    - Uses modal pop-ups for confirming edits, deletions, and form submissions (`editWarning`, `deleteWarning`, `modal`).
+ *    - Displays appropriate messages and options for users to confirm or cancel actions, ensuring that irreversible operations are clearly communicated.
+ *
+ * 4. **Form Submission and Data Saving**:
+ *    - On form submission (`handleSubmit`), the component sends an update request, deleting the current structure and posting the new one.
+ *    - The component also triggers a CSV download (`createCSV`) with the updated folder structure.
+ *    - Countdown functionality is included for transitioning to another page after data is saved.
+ *
+ * 5. **Utility Functions**:
+ *    - `convertDicToArrayoOfDic`: Converts the tree structure into a format suitable for saving and exporting as CSV.
+ *    - `formatArrayToString`: Formats folder paths into a string format for CSV generation.
+ *
+ * 6. **User Interface Elements**:
+ *    - The component includes a dynamically updating tree view (`FolderTree`), inputs for folder naming, and buttons for managing folder actions (add, edit, delete).
+ *    - Provides visual feedback and additional options based on the current state of the tree and user selections.
+ *
+ * This component is designed to offer an interactive and user-friendly way for users to manage and modify the asset's folder structure, ensuring data consistency while providing necessary warnings and confirmations for critical actions.
+ */
+
 
 const EditSpine = () => {
   const { bridgeID , id } = useParams();
@@ -407,12 +441,13 @@ const [hasConditionBeenMet, setConditionMet] = useState(false);
                     <tbody>
                         <tr>
                             <td colSpan="6">
-                                <img
-                                src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                                width={"800"}
-                                height={"250px"}
-                                alt={bridge.name}
-                                />
+                            <img 
+                              src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                              width={"800px"} 
+                              height={"250px"} 
+                              onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                              alt="Asset"
+                            />
                                 <div className="text-overlay">
                                     <h3>{bridge.name}</h3>
                                 </div>

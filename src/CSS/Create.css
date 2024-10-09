@@ -1,0 +1,197 @@
+/* Create */
+
+.map-container-Create {
+    height: 100%;
+    width: 125%;
+  }
+  
+
+.create label {
+    text-align: left;
+    display: block;
+    font-size: 20px;
+  }
+  
+  .create p {
+    font-size: 20px;
+  }
+  
+  .create h2 {
+    text-align: center;
+    font-size: 40px;
+    color: darkorange;
+    margin-bottom: 10px;
+  }
+  
+  .create input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid white;
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    width: 100%;
+    font-size: 20px;
+    height: 30px;
+   /* margin: 10px 0;  */
+    box-sizing: border-box;
+    display: block;
+  }
+  .ConfirmForm button {
+    background: darkorange;
+    color: white;
+    border: 0;
+    padding: 8px;
+    border-radius: 8px;
+    width: 200px;
+    cursor: pointer;
+    display: block;
+    margin: 10px;
+  }
+  
+  .ConfirmForm button:hover {
+    opacity: 0.8; /* Set the opacity on hover */
+  }
+  
+  
+  .createSpineHead {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .createSpineHead1 {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .secoundTable {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .createSpineHeadr image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; /* Set the color of your text */
+    font-size: 24px; /* Set the font size of your text */
+    font-weight: bold; /* Set the font weight of your text */
+    text-align: center;
+  }
+  
+  .create {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: auto;
+    width: 70%;
+    background-color: #E1E1E1;
+  }
+  
+
+  
+  .flex-container {
+    display: flex;
+    justify-content: space-between; /* יפרוס את הקונטיינרים בצורה שווה */
+    align-items: stretch;
+
+}
+
+.left-container, .right-container {
+    flex-basis: 45%; /* כל צד יתפוס 45% מהרוחב */
+    margin-right: 2.5%;
+    box-sizing: border-box; 
+}
+
+.right-container {
+    flex-grow: 1; /* זה ישמור על המבנה גמיש אם יש צורך ברוחב נוסף */
+    margin-top: -78px;
+}
+  
+  .radio-buttons {
+    display: flex;
+    gap: 20px; /* Adjust the gap to your preference */
+    padding-top: 10px;
+  }
+  
+  /* Style for the radio button itself */
+  .radio-buttons input[type="radio"] {
+    width: 20px; /* Set the width of the radio button */
+    height: 20px; /* Set the height of the radio button */
+    align-items: center;
+  }
+  
+  /* Style for the label associated with the radio button */
+  .radio-buttons label {
+    font-size: 20px; /* Adjust the font size of the label */
+    position: relative;
+  }
+
+  /* Slide Box */
+  .unit-toggle {
+    display: flex;
+    align-items: center; /* מיישר את ה-Slider והטקסט לגובה אחיד */
+}
+
+.unit-label {
+    margin-left: 10px; /* מוסיף מרווח בין ה-Slider לטקסט */
+    font-size: 16px; /* גודל טקסט */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 21px;
+    width: 21px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: darkorange;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+
+  

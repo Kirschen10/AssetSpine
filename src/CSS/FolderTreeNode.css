@@ -37,3 +37,27 @@
   transition: opacity 0.3s;
 }
 
+.folder-buttons button {
+  margin-left: 5px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.folder-buttons img {
+  background-color: #E1E1E1;
+  width: 20px;
+  height: 20px;
+}
+
+/* FolderTreeNode.css */
+.folder-buttons button:hover {
+  opacity: 0.7; /* You can adjust the opacity value as needed */
+}
+
+
+
+
+
+

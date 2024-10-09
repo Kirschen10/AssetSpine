@@ -1,6 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 
+/*
+ * The Folders component manages the selection and customization of additional folder settings for an asset's spine (e.g., a bridge's structure). It provides a user interface to select specific folders and options, allowing users to tailor the folder structure based on the asset's characteristics and requirements.
+ *
+ * Key Functionalities:
+ * 1. **Data Fetching and Initialization**:
+ *    - Fetches existing asset and folder data from the server (`tbl_asset_spine` and `tbl_folders`) using the Fetch API and initializes the component state based on the retrieved data.
+ *    - If the asset's folder settings exist in the database (`FoldersSettings`), the component populates the form fields accordingly for editing purposes.
+ *
+ * 2. **Checkbox Management**:
+ *    - The component contains several checkboxes (`General`, `Circles`, `Nadir`, `Sides`, `GuardRails`, `Angle_360`, `Thermal`, `ToDelete`, and `SubFolders`) allowing users to toggle the inclusion of specific folders in the asset’s spine.
+ *    - State values are updated dynamically when users interact with checkboxes.
+ *
+ * 3. **Form Submission**:
+ *    - On form submission (`handleSubmit`), the component collects all selected folder settings into a `Directories_values` object and navigates to the next path using `determineNextPath`.
+ *    - Depending on whether folder settings already exist for the asset, the component navigates to either the creation or edit mode of the next page (`TreeFolderConfirm`).
+ *
+ * 4. **Navigation and Back Handling**:
+ *    - The component includes a back button (`handleBack`) that navigates to the previous form page based on the current state (`FoldersSettings`) and the values passed.
+ *    - The back navigation considers the sequence of steps in the form to ensure the user returns to the correct previous page.
+ *
+ * 5. **State and Effect Handling**:
+ *    - The component uses React’s `useState` and `useEffect` hooks to manage and update state values (e.g., folder options and loading states).
+ *    - An effect runs when the component mounts to fetch initial data and populate settings if existing data is available.
+ *    - A separate effect initializes settings when the component detects that `FoldersSettings` has data and the component is loaded for the first time (`firstTime` state).
+ *
+ * 6. **Styling and User Interface**:
+ *    - The component renders a form-like interface with styled checkboxes and labels that users can interact with to configure the folder settings.
+ *    - It displays a table with options for various folder types, allowing users to customize the folders for the asset's spine.
+ *    - Conditional rendering is used to show loading states and manage the "Next" button behavior based on the loading status (`isLoading`).
+ *
+ * The component is designed to be modular and dynamic, providing flexibility for editing or creating folder settings based on user interactions and the current state of the asset's configuration.
+ */
+
 const Folders = () => {
     // Destructure the data from the state object
   const { state } = useLocation();
@@ -181,12 +214,13 @@ useEffect(() => {
                     <tbody>
                         <tr>
                             <td colSpan="6">
-                                <img
-                                src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                                width={"800"}
-                                height={"250px"}
-                                alt={bridge.name}
-                                />
+                            <img 
+                              src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                              width={"800px"} 
+                              height={"250px"} 
+                              onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                              alt="Asset"
+                            />
                                 <div className="text-overlay">
                                     <h3>{bridge.name}</h3>
                                 </div>

@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
-import "./Modal.css";
+import { useParams, useHistory } from 'react-router-dom';
+import "./CSS/Modal.css";
+import "./CSS/AddNewAsset.css"; 
 import axios from 'axios';
+
+/*
+ * The AddNewAsset component is designed to allow users to add a new asset (e.g., bridge, building, etc.) to the system.
+ * It contains a form where users can input various details about the asset, such as its name, location, type, and image.
+ *
+ * The component includes several sections:
+ * 1. Data Fetching: Loads the existing assets from the backend to check for potential duplicates.
+ * 2. Form Handling: Manages the state for each input field (name, structure name, location, coordinates, etc.).
+ * 3. Modals and Alerts: Displays pop-up modals for warnings (e.g., missing fields or duplicate asset IDs) and a confirmation message when the asset is successfully added.
+ * 4. Image Upload: Allows the user to upload an image of the asset and includes handling for file selection.
+ * 5. Submit Handling: Sends a POST request with the form data to the backend when the user submits the form. If successful, the user is redirected to the homepage.
+ */
 
 const AddNewAsset = () => {
 
@@ -19,7 +32,6 @@ const AddNewAsset = () => {
   }, []);
 
 
-
   const [name, setName] = useState(null);
   const [structureName, setStructureName] = useState(null);
   const [spans, setSpans] = useState(null);
@@ -31,8 +43,6 @@ const AddNewAsset = () => {
   const [mainRoad, setMainRoad] = useState(null);
   const [location, setLocation] = useState(null);
   const [image, setImage] = useState(null);
-
-
 
   ////////// Modal - popup /////////////////
 
@@ -74,35 +84,30 @@ const AddNewAsset = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append('name', name || '');  // נשלח מחרוזת ריקה אם אין שם
+    formData.append('structure_name', structureName || '');
+    formData.append('spans', spans ? spans : 1);
+    formData.append('description', description || '');
+    formData.append('organization', organization || '');
+    formData.append('lon', longitude || '');  // נשלח מחרוזת ריקה אם אין ערך
+    formData.append('lat', latitude || '');
+    formData.append('added_by_user', id);
+    formData.append('image', image);  // העלאת קובץ
+    formData.append('bridge_type', assetType);
+    formData.append('field1', mainRoad || '');
+    formData.append('location', location || '');
 
-    const values = {
-      name: name,
-      structure_name: structureName,
-      spans: spans,
-      description: description,
-      organization: organization,
-      lon: longitude,
-      lat: latitude,
-      added_by_user: id,
-      image: image,
-      bridge_type: assetType,
-      field1: mainRoad,
-      location: location,
-    };
-
-
-    if(name === '' || name === null)
-    {
-      return setElertWrning(!elertWrning);
-    }
-    else{
-      setModal(!modal);
-      axios.post('http://localhost:8081/tbl_asset_spine', values)
-      .then((res) => {
+    axios.post('http://localhost:8081/tbl_asset_spine', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then((res) => {
+        console.log('Success:', res.data);
         history.push(`/Home/${id}`);
-      })
-      .catch(err => console.log(err));
-    }
+    })
+    .catch(err => console.log(err));
   };
 
 
@@ -160,13 +165,14 @@ const AddNewAsset = () => {
             </tr>
             <tr>
               <td><p>Image</p>
-              <input type="file" disabled value={image} onChange={(e) => setImage(e.target.value)} /></td>
+              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
+              </td>
             </tr>
           </tbody>
         </table>
 
         <div className='ConfirmForm'>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div>
             <button onClick={handleSubmit}>Submit</button>
           </div>
         </div>
@@ -178,9 +184,7 @@ const AddNewAsset = () => {
         <div className="modal">
           <div className="modal-content">
             <h2>Thank You for Your Input!</h2>
-            <p>
-              Data was saved
-            </p>
+            <p>Data was saved</p>
             <p style={{paddingTop:"10px"}}>Redirecting in <strong>{remainingTime}</strong> seconds...</p>
           </div>
         </div>
@@ -189,11 +193,9 @@ const AddNewAsset = () => {
         <div className="modal">
           <div className="modal-content">
             <h2>Warning</h2>
-            <p>
-            Please fill the name
-            </p>
-            <button className="close-modal" style={{border:"none", backgroundColor:"#f1f1f1"}} onClick={toggleElertWrning}>
-            <img src = "/images/clear.png" width={'20px'}/>
+            <p>Please fill the name</p>
+            <button className="close-modal" onClick={toggleElertWrning}>
+              <img src = "/images/clear.png" className="clear-icon"/>
             </button>
           </div>
         </div>
@@ -202,18 +204,15 @@ const AddNewAsset = () => {
         <div className="modal">
           <div className="modal-content">
             <h2>Warning</h2>
-            <p>
-            Bid ${bid} already exists. Please select a new one.
-            </p>
-            <button className="close-modal" style={{border:"none", backgroundColor:"#f1f1f1"}} onClick={toggleSameBidWrning}>
-            <img src = "/images/clear.png" width={'20px'}/>
+            <p>Bid already exists. Please select a new one.</p>
+            <button className="close-modal" onClick={toggleSameBidWrning}>
+              <img src = "/images/clear.png" className="clear-icon"/>
             </button>
           </div>
         </div>
       )}
     </div>
   );
-  
 }
 
 export default AddNewAsset;

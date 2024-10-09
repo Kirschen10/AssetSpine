@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 
+/*
+ * The AbutmentCountForm component is responsible for managing and displaying the details of abutment elements 
+ * in a bridge structure. It allows users to enter the number of wall wings and bearings associated with each abutment,
+ * providing both manual input and button-based increment/decrement options.
+ *
+ * The component consists of several sections:
+ * 1. Data Fetching: Uses useEffect to fetch bridge data, initial settings, and advanced settings from the backend.
+ * 2. Form Handling: Initializes and manages form data related to the number of abutments, wall wings, and bearings.
+ * 3. Event Handlers: Manages user interactions such as navigating back, submitting the form, and updating form fields.
+ * 4. Conditional Rendering: Displays elements like the bridge image and form inputs dynamically based on the state of the data.
+ * 5. Popup Image: Shows an image when the user hovers over the help button for additional bridge components information.
+ */
+
 const AbutmentCountForm = () => {
   const { state } = useLocation();
 
@@ -12,7 +25,7 @@ const AbutmentCountForm = () => {
   const [isLoading, setIsLoading] = useState(false); // To confirm button
   const [numberOfInputs, setNumberOfInputs] = useState(AbutmentCount);
   const history = useHistory();
-  console.log(perviousPageData);
+
   const [formData, setFormData] = useState(() => {
     const initialFormData = [];
     for (let i = 0; i < numberOfInputs; i++) {
@@ -327,11 +340,12 @@ const AbutmentCountForm = () => {
               <tbody>
                 <tr>
                   <td colSpan="6">
-                    <img
-                      src={bridge.image_url ? bridge.image_url : "/images/No-Image-Available.png"}
-                      width={"800"}
-                      height={"250px"}
-                      alt={bridge.name}
+                  <img 
+                        src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
+                        width={"800px"} 
+                        height={"250px"} 
+                        onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
+                        alt="Asset"
                       />
                   </td>
                 </tr>

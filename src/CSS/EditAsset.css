@@ -1,0 +1,131 @@
+/* עיצוב למעטפת הראשית */
+.EditAsset {
+    background-color: #E1E1E1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1000px; 
+    margin: 20px auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: left; 
+}
+
+.EditAsset p {
+    color: darkorange; 
+    font-size: 24px; 
+    font-weight: bold; 
+}
+
+/* עיצוב לטבלה */
+.EditAssetTable {
+    width: 100%; 
+    max-width: 600px; 
+    border-collapse: collapse;
+}
+
+.EditAssetTable td {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin-bottom: 15px;
+}
+
+.EditAssetTable p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: left; 
+}
+
+.EditAssetTable input,
+.EditAssetTable select {
+    width: 100%; 
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.EditAssetTable input:focus,
+.EditAssetTable select:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 5px rgba(211, 84, 0, 0.5);
+}
+
+.ConfirmForm {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.ConfirmForm button {
+    background-color: darkorange;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ConfirmForm button:hover {
+    background-color: #e67e22;
+}
+
+.required {
+    color: red;
+}
+
+.image-container-EditAsset {
+    display: flex;
+    align-items: center;
+  }
+  
+  .current-image-EditAsset {
+    width: 350px;
+    height: auto;
+    max-height: 350px;
+  }
+  
+  .button-container-EditAsset {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 20px;
+  }
+
+  .button-container-EditAsset button{
+    width: 200px;
+  }
+
+  .custom-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: darkorange;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+  }
+  
+  .custom-button:hover {
+    opacity: 0.6;
+  }
+  
+  .custom-button .icon {
+    margin-right: 10px; /* מרווח בין האייקון לטקסט */
+    font-size: 18px; /* גודל האייקון */
+  }
+  
