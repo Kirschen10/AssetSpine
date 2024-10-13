@@ -449,7 +449,7 @@ const handleConfirmation = (confirmed) => {
           <div className="flex-container">
             <div className="left-container">
               <div className='createSpineHead'>
-                <table style={{ backgroundColor: "#E1E1E1", textAlign: "center" }}>
+                <table className="table-with-spacing" style={{ backgroundColor: "#E1E1E1", textAlign: "center" }}>
                     <tbody>
                         <tr>
                         <td colSpan="6">
@@ -465,7 +465,7 @@ const handleConfirmation = (confirmed) => {
                             </div>
                         </td>
                         </tr>
-
+                        <br />
                         {/* New row with 4 values (colSpan for only 4 cells) */}
                         <tr>
                         <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Choose Unit:</p></th>
@@ -478,7 +478,7 @@ const handleConfirmation = (confirmed) => {
                             <span>{unit === 'Meters' ? 'Meters' : 'Feet'}</span>
                         </div>
                         </td>
-                        <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Longitude:</p></th>
+                        <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Measurement:</p></th>
                         <td colSpan="2" style={{ whiteSpace: "nowrap" }}>
                         <div className="unit-toggle">
                             <label className="switch">

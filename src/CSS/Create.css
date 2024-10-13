@@ -50,13 +50,17 @@
   .ConfirmForm button:hover {
     opacity: 0.8; /* Set the opacity on hover */
   }
-  
+
+  .table-with-spacing td, .table-with-spacing th {
+    padding: 2px; /* מוסיף רווח של 10 פיקסלים לכל תא בטבלה */
+}  
   
   .createSpineHead {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    
   }
   
   .createSpineHead1 {
@@ -64,6 +68,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
   }
   .secoundTable {
     position: relative;
@@ -77,6 +82,8 @@
     height: auto;
     border-radius: 10px;
   }
+
+
   
   .text-overlay {
     position: absolute;
