@@ -1,0 +1,89 @@
+.button:hover span {
+    padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+  /* For a question mark button inside the input */
+  .buttonInside{
+    position:relative;
+    margin-bottom:10px;
+  }
+  
+  .buttonInside button{
+    position:absolute;
+    right: 30px;
+    top: 15px;
+    border:none;
+    height:25px;
+    width:25px;
+    border-radius:100%;
+    outline:none;
+    text-align:center;
+    font-weight:bold;
+    padding:2px;
+    cursor: pointer;
+  }
+  
+  .buttonNear {
+    position: relative;
+  }
+  
+  .buttonNear button {
+    position: absolute;
+    right: 10px; /* Adjust this value to control the distance from the text */
+    top: 50%;
+    transform: translateY(-85%);
+    border: none;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    outline: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px;
+    cursor: pointer;
+  }
+  
+  /* Add any other styles for the image if needed */
+  .buttonNear .image-container {
+    display: none; /* Assuming you want to hide the image by default */
+  }
+  
+  .buttonNear:hover .image-container {
+    display: block; /* Show the image on hover */
+  }
+  
+  
+.imageContainer {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+  }
+  
+  .imageContainer img {
+    max-width: 80vw;
+    max-height: 80vh;
+  }
+  
+  
+  .image-container {
+    position: fixed;
+    top: 45%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease-in-out;
+  }
+  
+  .hover-button:hover + .image-container {
+    visibility: visible;
+    opacity: 1;
+  }

@@ -39,7 +39,7 @@ const Navbar = () => {
             >
                 {/* Link to the Home page */}
                 <Link to={`/Home/${id}`}>
-                    <img src='/images/Manam_White_Icon.png' width={40} alt="Manam Logo" />
+                    <img src='/images/Manam_White_Icon.png' width={60} alt="Manam Logo" />
                 </Link>
                 {isIconHovered && (
                     // Tooltip for the Home Page link

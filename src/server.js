@@ -242,7 +242,7 @@ app.post('/tbl_asset_spine', upload.single('image'), (req, res) => {
 });
 
 app.post('/tbl_initial_settings', (req, res) => {
-    const sql = "INSERT INTO tbl_initial_settings (Bid, name, Survey_ID, Bridge_Type, Structure_Name, Main_Road, Span_Count, Abutment_Count, Set_Of_Columns,Arches_Count, Arches_Connectors, Lanes, Parapets_Count, Direction, Unit) VALUES (?)";
+    const sql = "INSERT INTO tbl_initial_settings (Bid, name, Survey_ID, Bridge_Type, Structure_Name, Main_Road, Span_Count, Abutment_Count, Set_Of_Columns,Arches_Count, Arches_Connectors, Lanes, Parapets_Count, Direction, Unit, Measurement) VALUES (?)";
     const values = [
         req.body.Bid,
         req.body.name,
@@ -259,6 +259,7 @@ app.post('/tbl_initial_settings', (req, res) => {
         req.body.Parapets_Count,
         req.body.Direction,
         req.body.Unit,
+        req.body.Measurement,
     ]
     db.query(sql, [values], (err, data) => {
         if(err) return res.json(err);

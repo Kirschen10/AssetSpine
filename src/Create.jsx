@@ -134,11 +134,17 @@ const Create = () => {
     const surveyID = allSurveyID?.id || "";
     const [direction, setDirection] = useState("")
     const [firstTime,setFirstTime ] = useState(true);
-    const [unit, setUnit] = useState('meters');
+    const [unit, setUnit] = useState('Meters');
+    const [measurement, setMeasurement] = useState('No');
 
     const handleUnitChange = () => {
-      setUnit((prevUnit) => (prevUnit === 'meters' ? 'feet' : 'meters'));
+      setUnit((prevUnit) => (prevUnit === 'Meters' ? 'Feet' : 'Meters'));
     };
+
+    const handleMeasurementChange = () => {
+        setMeasurement((prevUnit) => (prevUnit === 'No' ? 'Yes' : 'No'));
+      };
+    
   
 
     useEffect(() => {
@@ -152,6 +158,7 @@ const Create = () => {
             setParapetsCount(parseInt(values.Parapets_Count, 10));
             setDirection(values.Direction);
             setUnit(values.Unit);
+            setMeasurement(values.Measurement);
             setFirstTime(false);
         }
         else if(isExist && firstTime === true){
@@ -164,6 +171,7 @@ const Create = () => {
             setParapetsCount(parseInt(isExist.Parapets_Count, 10));
             setDirection(isExist.Direction);
             setUnit(isExist.Unit);
+            setMeasurement(isExist.Measurement);
             setFirstTime(false);
         }
     });
@@ -327,8 +335,10 @@ const handleSubmit = (e) => {
       Lanes: lanes,
       Parapets_Count: parapetsCount,
       Direction : direction,
-      Unit: unit
+      Unit: unit,
+      Measurement: measurement
     };
+    
     if(direction === "")
     {
         setModalDirection(!modalDirection);
@@ -439,44 +449,77 @@ const handleConfirmation = (confirmed) => {
           <div className="flex-container">
             <div className="left-container">
               <div className='createSpineHead'>
-                <table style={{  backgroundColor: "#E1E1E1" }}>
-                  <tbody>
-                  <tr>
-                                <td colSpan="6">
-                                <img 
-                                        src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`}  // Add a timestamp to the URL
-                                        width={"600px"} 
-                                        height={"250px"} 
-                                        onError={(e) => e.target.src = '/images/No-Image-Available.png'}  // If there is an error, replace with a default image
-                                        alt="Asset"
-                                    />
-                                    <div className="text-overlay">
-                                        <h3>{bridge.name}</h3>
-                                    </div>
-                                </td>
-                                </tr>
-                                <tr>
-                                    <th align='left'><p>Bid:</p></th>
-                                    <td><p>{bridge.bid}</p></td>
-                                    <th align='left'><p>Survey ID:</p></th>
-                                    <td><p>{surveyID}</p></td>
-                                    <th><p>Asset Type:</p></th>
-                                    <td><p>{bridge.bridge_type}</p></td>
-                                </tr>
-                                <tr>
-                                    <th align='left'><p>Structure Name:</p></th>
-                                    <td><p>{bridge.structure_name}</p></td>
-                                    <th align='left'><p>Main Road:</p></th>
-                                    <td ><p>{bridge.field1}</p></td>
-                                </tr>
-                                <tr>
-                                    <td style={{width: "100%", 
-                                                height: "1px",
-                                                backgroundColor: "white",
-                                                margin: "10px 0"
-                                                }} colSpan="6"></td>
-                                </tr>
-                  </tbody>
+                <table style={{ backgroundColor: "#E1E1E1", textAlign: "center" }}>
+                    <tbody>
+                        <tr>
+                        <td colSpan="6">
+                            <img
+                            src={`http://localhost:8081/image/${bridge.bid}?timestamp=${new Date().getTime()}`} // Add a timestamp to the URL
+                            width={"600px"}
+                            height={"250px"}
+                            onError={(e) => (e.target.src = '/images/No-Image-Available.png')} // If there is an error, replace with a default image
+                            alt="Asset"
+                            />
+                            <div className="text-overlay">
+                            <h3>{bridge.name}</h3>
+                            </div>
+                        </td>
+                        </tr>
+
+                        {/* New row with 4 values (colSpan for only 4 cells) */}
+                        <tr>
+                        <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Choose Unit:</p></th>
+                        <td colSpan="2" style={{ whiteSpace: "nowrap" }}>
+                        <div className="unit-toggle">
+                            <label className="switch">
+                                <input type="checkbox" onChange={handleUnitChange}  />
+                                <span className="slider round" ></span>
+                            </label>
+                            <span>{unit === 'Meters' ? 'Meters' : 'Feet'}</span>
+                        </div>
+                        </td>
+                        <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Longitude:</p></th>
+                        <td colSpan="2" style={{ whiteSpace: "nowrap" }}>
+                        <div className="unit-toggle">
+                            <label className="switch">
+                                <input type="checkbox" onChange={handleMeasurementChange}  />
+                                <span className="slider round" ></span>
+                            </label>
+                            <span>{ measurement === 'No' ? 'No' : 'Yes'}</span>
+                        </div>
+                        </td>
+                        </tr>
+
+                        {/* Row spans over 6 cells */}
+                        <tr>
+                        <th style={{ whiteSpace: "nowrap" }}><p>Bid:</p></th>
+                        <td style={{ whiteSpace: "nowrap" }}><p>{bridge.bid}</p></td>
+                        <th style={{ whiteSpace: "nowrap" }}><p>Survey ID:</p></th>
+                        <td style={{ whiteSpace: "nowrap" }}><p>{surveyID}</p></td>
+                        <th style={{ whiteSpace: "nowrap" }}><p>Asset Type:</p></th>
+                        <td style={{ whiteSpace: "nowrap" }}><p>{bridge.bridge_type}</p></td>
+                        </tr>
+
+                        {/* Another row with 4 cells */}
+                        <tr>
+                        <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Structure Name:</p></th>
+                        <td colSpan="2" style={{ whiteSpace: "nowrap" }}><p>{bridge.structure_name}</p></td>
+                        <th colSpan="2" style={{ whiteSpace: "nowrap" }}><p>Main Road:</p></th>
+                        <td colSpan="2" style={{ whiteSpace: "nowrap" }}><p>{bridge.field1}</p></td>
+                        </tr>
+
+                        <tr>
+                        <td
+                            style={{
+                            width: "100%",
+                            height: "1px",
+                            backgroundColor: "white",
+                            margin: "10px 0"
+                            }}
+                            colSpan="6"
+                        ></td>
+                        </tr>
+                    </tbody>
                 </table>
               </div>
               <div className='createSpineHead1' style={{ padding: "0px", alignItems: "center" }}>
@@ -690,20 +733,6 @@ const handleConfirmation = (confirmed) => {
                                             <button style={{backgroundColor: "transparent", border: "none", padding: "0" ,cursor: "pointer"}}>
                                                 <img src="/images/minus.png" alt="my image" onClick={onClickParapetsCountMinus}  style={{width:'30px', height:'30px', backgroundColor:"#E1E1E1"}}/>
                                             </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style={{width:"150px"}}>
-                                            <label style={{ marginRight: '8px' }}>Choose Unit:</label>
-                                        </td>
-                                        <td style={{ width: "200px" }}>
-                                            <div className="unit-toggle">
-                                                <label className="switch">
-                                                    <input type="checkbox" onChange={handleUnitChange}  />
-                                                    <span className="slider round" ></span>
-                                                </label>
-                                                <span>{unit === 'meters' ? 'Meters' : 'Feet'}</span>
-                                            </div>
                                         </td>
                                     </tr>
                                     <br></br>
